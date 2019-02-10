@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+
 import Sidebar from './components/Sidebar';
 
 import Topbar from './components/Topbar';
@@ -18,7 +19,7 @@ class App extends Component {
       
       <Sidebar />
       
-      <div className="page-container"><Topbar /></div>
+      <div className="page-container"><Topbar />
       <main className='main-content bgc-grey-100'>
         <div className="mainContent">
           <MasonryWidget />
@@ -28,6 +29,9 @@ class App extends Component {
         </div>
 
       </main>
+      
+      </div>
+      
       
       </div>
     ); 
