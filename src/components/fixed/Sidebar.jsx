@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Topbar from './Topbar';
+import {Link} from 'react-router-dom';
 class Sidebar extends Component {
     state = {  }
     render() { 
@@ -38,28 +39,30 @@ class Sidebar extends Component {
                 {/* <!-- ### $Sidebar Menu ### --> */}
                 <ul className="sidebar-menu scrollable pos-r">
                   <li className="nav-item mT-30 active">
-                    <a className="sidebar-link" href="index.html">
+                  <Link to="/">
                       <span className="icon-holder">
                         <i className="c-blue-500 ti-home"></i>
                       </span>
                       <span className="title">Tickets</span>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a className='sidebar-link' href="email.html">
+                    <Link to="/inventory">
                       <span className="icon-holder">
                         <i className="c-brown-500 ti-email"></i>
                       </span>
                       <span className="title">Inventory</span>
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a className='sidebar-link' href="compose.html">
+                  <Link to="/inventory">
+                    <div className='sidebar-link' >
                       <span className="icon-holder">
                         <i className="c-blue-500 ti-share"></i>
                       </span>
                       <span className="title">Price Listing</span>
-                    </a>
+                    </div>
+                  </Link>
                   </li>
                   <li className="nav-item">
                     <a className='sidebar-link' href="calendar.html">

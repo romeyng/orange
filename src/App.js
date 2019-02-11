@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 
 
-import Sidebar from './components/Sidebar';
+import Sidebar from './components/fixed/Sidebar';
 
-import Topbar from './components/Topbar';
-import MasonryWidget from './components/MasonryWidget';
-import TicketsTable from './components/TicketsTable';
+import Topbar from './components/fixed/Topbar';
+
+
+
+
+
+
+
+
+import MainContent from './components/MainContent';
 
 
 
@@ -19,18 +26,13 @@ class App extends Component {
       
       <Sidebar />
       
-      <div className="page-container"><Topbar />
-      <main className='main-content bgc-grey-100'>
-        <div className="mainContent">
-          <MasonryWidget />
-          <div class="container-fluid">
-          <TicketsTable />
-          </div>
-        </div>
-
-      </main>
-      
+      <div className="page-container">
+        <Topbar />
+       
+        <MainContent />
       </div>
+      
+      
       
       
       </div>

@@ -5,12 +5,12 @@ class TicketsTable extends Component {
         return ( 
             
                   
-                    
+          <div className="container-fluid">  
                   <div className="row">
                     <div className="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
                     <div className="bgc-white bd bdrs-3 p-20 mB-20">
                       <h4 className="c-grey-900 mB-20">Ticket Requests</h4>
-                      <table id="dataTable" className="table table-striped table-bordered" cellspacing="0" width="90%">
+                      <table id="dataTable" className="table table-striped table-bordered" cellSpacing="0" width="100%">
                           <thead>
                             <tr>
                               <th>Ticket No</th>
@@ -60,6 +60,7 @@ class TicketsTable extends Component {
                         </table>
                     </div>
                     </div>
+                  </div>
                   </div>
          );
     }
