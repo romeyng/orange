@@ -1,6 +1,49 @@
 import React, { Component } from 'react';
+const $ = require('jquery')
+$.DataTable =  require('datatables.net')
 class TicketsTable extends Component {
-    state = {  }
+  constructor(props){
+    super(props);
+    this.state={
+      payload: [],
+      isLoaded: false
+    }
+  }
+  componentDidMount() {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(res => res.json())
+      .then(json=>{
+        this.setState({
+          isLoaded: true,
+          payload: json
+        })
+      });
+
+    this.$el = $(this.el)
+    this.$el.DataTable({
+      data: this.state.payload,
+      columns: [
+            { title: "Address" },
+            { title: "Company" },
+            { title: "Email" },
+            { title: "id" },
+            { title: "Name" },
+            { title: "Phone" },
+            { title: "username"},
+            { title: "website"}
+      ]
+    })
+  }
+  componentWillUnmount() {
+    this.$el.DataTable.destroy(true)
+  }
+  shouldComponentUpdate() {
+    return false
+  }
+
+    
+
+    
     render() { 
         return ( 
             
@@ -10,53 +53,8 @@ class TicketsTable extends Component {
                     <div className="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
                     <div className="bgc-white bd bdrs-3 p-20 mB-20">
                       <h4 className="c-grey-900 mB-20">Ticket Requests</h4>
-                      <table id="dataTable" className="table table-striped table-bordered" cellSpacing="0" width="100%">
-                          <thead>
-                            <tr>
-                              <th>Ticket No</th>
-                              <th>Date Created</th>
-                              <th>Due Date</th>
-                              <th>Client Name</th>
-                              <th>Tail Number</th>
-                              <th>Status</th>
-                            </tr>
-                          </thead>
+                      <table id="dataTable" className="table table-striped table-bordered" cellSpacing="0" width="100%" ref={el=>this.el =el}>
                           
-                          <tbody>
-                            <tr>
-                              <td>FU12345</td>
-                              <td>Jan 10 2019</td>
-                              <td>Jan 10 2019</td>
-                              <td>Grenadines Air</td>
-                              <td>S5596</td>
-                              <td>Completed</td>
-                            </tr>
-                            <tr>
-                              <td>AS54321</td>
-                              <td>Jan 1 2019</td>
-                              <td>Jan 10 2019</td>
-                              <td>Gama Aviation</td>
-                              <td>L1564</td>
-                              <td>Pending</td>
-                            </tr>
-                            <tr>
-                                <td>FU12345</td>
-                                <td>Jan 10 2019</td>
-                                <td>Jan 10 2019</td>
-                                <td>Grenadines Air</td>
-                                <td>S5596</td>
-                                <td>Completed</td>
-                              </tr>
-                              <tr>
-                                <td>AS54321</td>
-                                <td>Jan 1 2019</td>
-                                <td>Jan 10 2019</td>
-                                <td>Gama Aviation</td>
-                                <td>L1564</td>
-                                <td>Pending</td>
-                              </tr>
-                            
-                          </tbody>
                         </table>
                     </div>
                     </div>
