@@ -14,7 +14,7 @@ class CreateTicket extends Component {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Modal heading
+            FBO Fuel Request/ Order
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
