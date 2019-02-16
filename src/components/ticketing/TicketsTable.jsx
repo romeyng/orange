@@ -12,7 +12,7 @@ class TicketsTable extends Component {
   }
 
   async componentDidMount() {
-    const response = await fetch(`http://192.168.1.50:8080`);
+    const response = await fetch(`https://jsonplaceholder.typicode.com/users`);
     const json = await response.json();
     this.setState({ payload: json });
     console.log("async done");
@@ -30,9 +30,9 @@ class TicketsTable extends Component {
     $(this.refs.tickets).DataTable({
       data: this.state.payload,
       columns: [
-        { title: "id", data: "fuelID" },
+        { title: "id", data: "id" },
         { title: "name", data: "name" },
-        { title: "price_category", data: "price_category" }
+        { title: "email", data: "email" }
       ]
     });
   }
