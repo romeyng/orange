@@ -65,6 +65,16 @@ class Sidebar extends Component {
                 </div>
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="/administrative">
+                <div className="sidebar-link">
+                  <span className="icon-holder">
+                    <i className="c-blue-500 ti-settings" />
+                  </span>
+                  <span className="title">Admin</span>
+                </div>
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

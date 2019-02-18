@@ -12,9 +12,13 @@ class TicketsTable extends Component {
   }
 
   async componentDidMount() {
-    const response = await fetch(`https://jsonplaceholder.typicode.com/users`);
+    try{
+    const response = await fetch('http://52.15.62.203:8080/');
     const json = await response.json();
     this.setState({ payload: json });
+    } catch{
+
+    }
     console.log("async done");
     this.fillTicketsTable();
   }
@@ -24,15 +28,18 @@ class TicketsTable extends Component {
       .destroy(true);
   }
   shouldComponentUpdate(nextProps, nextState) {
-    return true;
+    return true; 
   }
   fillTicketsTable() {
     $(this.refs.tickets).DataTable({
       data: this.state.payload,
       columns: [
-        { title: "id", data: "id" },
-        { title: "name", data: "name" },
-        { title: "email", data: "email" }
+        { title: "Ticket No.", data: "fuelrequestID" },
+        { title: "Date Created", data: "arrival_date" },
+        { title: "Due Date", data: "required_on" }, 
+        { title: "Client Name", data: "customerID"},
+        { title: "Tail No", data: "tail_no"},
+        { title: "Status", data: "status"}
       ]
     });
   }
