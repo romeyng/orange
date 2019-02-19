@@ -7,7 +7,7 @@ class NewCustomerForm extends Component {
   constructor(props) {
     super(props);
     this.state = {customerName: '',
-                  fuelCompany: '',
+                  company: '',
                   accountType: 'Regular'};
 
     this.handleChange = this.handleChange.bind(this);
@@ -17,10 +17,10 @@ class NewCustomerForm extends Component {
 
   postNewCustomer(){
     //function to send data to api
-    Axios.post('http://192.168.1.50:8080/administrative',
+    Axios.post('http://52.15.62.203:8080/createcustomer',
       {customerName: this.state.customerName,
       accountType: this.state.accountType,
-      fuelCompany: this.state.fuelCompany
+      company: this.state.company
     })
     .then(response => { 
       console.log(response)
@@ -36,7 +36,7 @@ class NewCustomerForm extends Component {
     const value = target.value;
     const name = target.name;
 
-    this.setState({
+    this.setState({ 
       [name]: value
     });
   }
@@ -72,11 +72,11 @@ class NewCustomerForm extends Component {
                     />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="inputAddress2">Fuel Company</label>
+                    <label htmlFor="inputAddress2">Company Name</label>
                     <input
                       type="text"
                       className="form-control"
-                      name="fuelCompany"
+                      name="company"
                       onChange={this.handleChange}
                       placeholder=""
                     /> 

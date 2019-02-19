@@ -56,12 +56,22 @@ class Sidebar extends Component {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/inventory">
+              <Link to="/rates">
                 <div className="sidebar-link">
                   <span className="icon-holder">
                     <i className="c-blue-500 ti-money" />
                   </span>
-                  <span className="title">Price Listing</span>
+                  <span className="title">Rates</span>
+                </div>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/reports">
+                <div className="sidebar-link">
+                  <span className="icon-holder">
+                    <i className="c-blue-500 ti-report" />
+                  </span>
+                  <span className="title">Reports</span>
                 </div>
               </Link>
             </li>
@@ -75,6 +85,7 @@ class Sidebar extends Component {
                 </div>
               </Link>
             </li>
+
           </ul>
         </div>
       </div>
