@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
-import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -10,7 +9,7 @@ class CreateTicket extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      startDate: new Date(),
+      startDate: Date(),
       fuelLocation: "Fuel Location",
       fuelType: "Fuel Type"
     };
@@ -206,13 +205,15 @@ class CreateTicket extends Component {
                     </div>
 
                     <div className="form-group col-6 input-group">
-                      <textbox
+                      <div
                         className="form-control form-control-lg bg-info"
                         type="text"
                         placeholder="0"
                         name="meterActual"
                         id="meterActual"
-                      />
+                      >
+                        0
+                      </div>
                       <div className="input-group-append">
                         <span className="input-group-text">us. gal</span>
                       </div>
