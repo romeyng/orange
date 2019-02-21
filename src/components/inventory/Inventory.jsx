@@ -5,7 +5,7 @@ class Inventory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedLocation: "CIW"
+      selectedLocation: "0"
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -28,7 +28,7 @@ class Inventory extends Component {
           <div className="border bgc-white">
             <form className="form-row">
               <div className="form-control form-control-lg col-3 border-0 mx-auto">
-                Viewing Inventory for
+                Viewing Fuel Recon for
               </div>
               <div className="col-3 mx-auto">
                 <select
@@ -37,14 +37,15 @@ class Inventory extends Component {
                   value={this.state.selectedLocation}
                   onChange={this.handleChange}
                 >
-                  <option value="CIW">CIW</option>
-                  <option value="AIA">AIA</option>
+                  <option value="0">ALL</option>
+                  <option value="1">CIW</option>
+                  <option value="2">AIA</option>
                 </select>
               </div>
               <div className="col-3 mx-auto" />
             </form>
           </div>
-          <InventoryContent selectedLocation={this.state.selectedLocation} />
+          <InventoryContent selectedLocation={this.state.selectedLocation} /> 
         </div>
       </main>
     );

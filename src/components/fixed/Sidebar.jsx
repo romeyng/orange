@@ -52,7 +52,7 @@ class Sidebar extends Component {
                 <span className="icon-holder">
                   <i className="c-brown-500 ti-package" />
                 </span>
-                <span className="title">Inventory</span>
+                <span className="title">Fuel Recon</span>
               </Link>
             </li>
             <li className="nav-item">
