@@ -12,6 +12,7 @@ class CreateTicket extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      customerName: "",
       dateCreated: new Date(),
       dateComplete: new Date(),
       fuelLocation: "Fuel Location",
@@ -110,6 +111,7 @@ class CreateTicket extends Component {
                         placeholder="Flight/ Customer Name"
                         name="customerName"
                         onChange={this.handleChange}
+                        value={this.customerName}
                         readOnly
                       />
                     </div>
@@ -118,15 +120,6 @@ class CreateTicket extends Component {
                     </div>
                   </div>
                   <div className="form-row">
-                    <div className="form-group col-2">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="customerID"
-                        placeholder="ID"
-                        name="customerID"
-                      />
-                    </div>
                     <div className="form-group col">
                       <input
                         type="text"
@@ -135,6 +128,7 @@ class CreateTicket extends Component {
                         placeholder="Tail #"
                         name="tailNo"
                         onChange={this.handleChange}
+                        value={this.tailNo}
                       />
                     </div>
                   </div>

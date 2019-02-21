@@ -25,6 +25,10 @@ class Administrative extends Component {
           >
             Create Customer
           </button>
+          <NewCustomerForm
+            show={this.state.newCustomerModal}
+            onHide={modalClose}
+          />
         </div>
       </main>
     );
