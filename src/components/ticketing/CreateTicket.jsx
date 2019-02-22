@@ -8,6 +8,8 @@ import Button from "react-bootstrap/Button";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
 import DatePicker from "react-date-picker";
+import NewCustomerForm from "../administrative/NewCustomerForm";
+import CustomerLookup from "../administrative/CustomerLookup";
 class CreateTicket extends Component {
   constructor(props) {
     super(props);
@@ -26,12 +28,21 @@ class CreateTicket extends Component {
       mtow: "",
       customerID: 1,
       userID: 1,
-      status: "done"
+      status: "",
+      prepaid: false,
+      showCustomerLookup: false
     };
     this.postNewFuelTicket = this.postNewFuelTicket.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.dateCreated = this.dateCreated.bind(this);
     this.dateComplete = this.dateComplete.bind(this);
+    this.customerLookup = this.customerLookup.bind(this);
+  }
+  customerLookup(e) {
+    e.preventDefault();
+    this.setState({
+      showCustomerLookup: true
+    });
   }
   postNewFuelTicket(e) {
     e.preventDefault();
@@ -84,6 +95,8 @@ class CreateTicket extends Component {
   componentDidUpdate(prevProps, prevState) {}
 
   render() {
+    let modalClose = () => this.setState({ showCustomerLookup: false });
+
     return (
       <Modal
         {...this.props}
@@ -116,7 +129,10 @@ class CreateTicket extends Component {
                       />
                     </div>
                     <div className="input-group-append">
-                      <button className="ti-search form-control form-control-lg btn btn-info " />
+                      <button
+                        className="ti-search form-control form-control-lg btn btn-info "
+                        onClick={this.customerLookup}
+                      />
                     </div>
                   </div>
                   <div className="form-row">
@@ -330,6 +346,10 @@ class CreateTicket extends Component {
           </form>
         </Modal.Body>
         <Modal.Footer>
+          <CustomerLookup
+            show={this.state.showCustomerLookup}
+            onHide={modalClose}
+          />
           <button
             className="btn btn-lg btn-primary "
             onClick={this.postNewFuelTicket}

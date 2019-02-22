@@ -23,11 +23,13 @@ class TicketingButtons extends Component {
               className="btn btn-lg btn-primary"
               onClick={this.createTicketForm}
             >
-              Create Request Ticket
+              New Uplift Ticket
             </button>
           </div>
           <div className="p-3">
-            <button className="btn btn-lg btn-warning">Edit Ticket</button>
+            <button className="btn btn-lg btn-warning">
+              New Supply Ticket
+            </button>
           </div>
           <CreateTicket show={this.state.modalShow} onHide={modalClose} />
         </div>

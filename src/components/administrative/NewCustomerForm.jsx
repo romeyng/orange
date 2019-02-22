@@ -44,7 +44,7 @@ class NewCustomerForm extends Component {
     return (
       <Modal
         {...this.props}
-        size="lg"
+        size="sm"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
@@ -56,15 +56,14 @@ class NewCustomerForm extends Component {
         <Modal.Body>
           <form>
             <div className="row">
-              <div className="bgc-white bd col-6">
-                <div className="c-grey-900"> Cutomer Details</div>
-                <div className="mT-30">
+              <div className="bgc-white bd col">
+                <div className="">
                   <div className="form-row">
                     <div className="form-group">
                       <label htmlFor="customerName">Customer Name</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control form-control-lg"
                         name="customerName"
                         onChange={this.handleChange}
                         placeholder=""
@@ -74,14 +73,14 @@ class NewCustomerForm extends Component {
                       <label htmlFor="inputAddress2">Company Name</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control form-control-lg"
                         name="company"
                         onChange={this.handleChange}
                         placeholder=""
                       />
                     </div>
                     <div className="form-row">
-                      <div className="form-group col-8 mx-auto">
+                      <div className="form-group col mx-auto">
                         <select
                           className="custom-select form-control form-control-lg"
                           name="accountType"

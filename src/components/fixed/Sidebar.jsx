@@ -69,7 +69,7 @@ class Sidebar extends Component {
               <Link to="/reports">
                 <div className="sidebar-link">
                   <span className="icon-holder">
-                    <i className="c-blue-500 ti-report" />
+                    <i className="c-blue-500 ti-notepad" />
                   </span>
                   <span className="title">Reports</span>
                 </div>
@@ -85,7 +85,6 @@ class Sidebar extends Component {
                 </div>
               </Link>
             </li>
-
           </ul>
         </div>
       </div>
