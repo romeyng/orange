@@ -110,6 +110,10 @@ class CreateTicket extends Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
+        <CustomerLookup
+            show={this.state.showCustomerLookup}
+            onHide={modalClose}
+          />
           <form>
             <div className="row">
               <div className="bgc-white bd col-6">
@@ -346,10 +350,7 @@ class CreateTicket extends Component {
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <CustomerLookup
-            show={this.state.showCustomerLookup}
-            onHide={modalClose}
-          />
+          
           <button
             className="btn btn-lg btn-primary "
             onClick={this.postNewFuelTicket}

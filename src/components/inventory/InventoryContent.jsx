@@ -6,41 +6,47 @@ $.DataTable = require("datatables.net");
 class InventoryContent extends Component {
   constructor(props) {
     super(props);
+    this.state={payload:[]}
     this.fillReconTable = this.fillReconTable.bind(this);
   }
 
   async componentDidMount() {
-    Axios.post("http://52.15.62.203:8080/getFuelRecon", {
+    Axios.get("http://52.15.62.203:8080/getfuelrecon", {
       location: this.props.selectedLocation
     })
       .then(response => {
         console.log(response);
+        this.setState({payload:response.data})
+        this.fillReconTable();
       })
       .catch(error => {
         console.log(error.response);
       });
-    console.log("sentpost req");
+
+    console.log("sentpost req"); 
+    
+   
   }
   componentWillUnmount() {
-    $(this.refs.tickets)
+    $(this.refs.fuelTable)
       .DataTable()
       .destroy(true);
   }
 
   fillReconTable() {
-    $(this.refs.tickets).DataTable({
+    $(this.refs.fuelTable).DataTable({
       data: this.state.payload,
       columns: [
-        { title: "Date", data: "date_update" },
+        { title: "Date", data: "date_updated" },
         { title: "Customer", data: "customer_name" }, //sql join tickets on customerid table for name
         { title: "Company", data: "company_name" },
         { title: "Tail No", data: "tail_no" }, //sql join tickets for tail no
-        { title: "Supply Ticket Ref", data: "supply_ticket_number" },
+        
         { title: "Fuel Added", data: "added" },
         { title: "Fuel Uplifted", data: "uplifted" },
         { title: "Balance (USG)", data: "usg_balance" },
-
-        { title: "Ticket Ref", data: "fuelRequestID" }
+        { title: "Airport", data: "airport_code" },
+        { title: "Ticket Ref", data: "fuelrequestID" }
       ]
     });
   }
@@ -51,8 +57,8 @@ class InventoryContent extends Component {
           <div className="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
             <div className="bgc-white bd bdrs-3 p-20 mB-20">
               <h4 className="c-grey-900 mB-20">
-                {" "}
-                Fuel Recon {this.props.selectedLocation}{" "}
+                
+                Fuel Recon 
               </h4>
 
               <table
