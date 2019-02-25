@@ -44,7 +44,7 @@ class InventoryContent extends Component {
         
         { title: "Fuel Added", data: "added" },
         { title: "Fuel Uplifted", data: "uplifted" },
-        { title: "Balance (USG)", data: "usg_balance" },
+        //{ title: "Balance (USG)", data: "usg_balance" },
         { title: "Airport", data: "airport_code" },
         { title: "Ticket Ref", data: "fuelrequestID" }
       ]

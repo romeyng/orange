@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import RatesTable from './RatesTable';
 class Rates extends Component {
     state = {  }
     render() { 
         return ( 
             <main className="main-content bgc-grey-100">
         <div className="mainContent">
-          Rates
+          <RatesTable/>
         </div>
       </main>
         );
