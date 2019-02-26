@@ -12,13 +12,11 @@ class TicketsTable extends Component {
   }
 
   async componentDidMount() {
-    try{
-    const response = await fetch('http://52.15.62.203:8080/');
-    const json = await response.json();
-    this.setState({ payload: json });
-    } catch{
-
-    }
+    try {
+      const response = await fetch("http://52.15.62.203:8080/");
+      const json = await response.json();
+      this.setState({ payload: json });
+    } catch {}
     console.log("async done");
     this.fillTicketsTable();
   }
@@ -28,7 +26,7 @@ class TicketsTable extends Component {
       .destroy(true);
   }
   shouldComponentUpdate(nextProps, nextState) {
-    return true; 
+    return true;
   }
   fillTicketsTable() {
     $(this.refs.tickets).DataTable({
@@ -36,10 +34,15 @@ class TicketsTable extends Component {
       columns: [
         { title: "Ticket No.", data: "fuelrequestID" },
         { title: "Date Created", data: "arrival_date" },
-        { title: "Due Date", data: "required_on" }, 
-        { title: "Client Name", data: "customerID"},
-        { title: "Tail No", data: "tail_no"},
-        { title: "Status", data: "status"}
+        {
+          title: "Due Date",
+          data: "required_on",
+          type: "datetime",
+          format: "M/D/YYYY"
+        },
+        { title: "Client Name", data: "customerID" },
+        { title: "Tail No", data: "tail_no" },
+        { title: "Status", data: "status" }
       ]
     });
   }

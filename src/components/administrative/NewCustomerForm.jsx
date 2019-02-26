@@ -24,6 +24,9 @@ class NewCustomerForm extends Component {
       })
       .then(response => {
         console.log(response);
+        this.props.refreshlist();
+
+        this.props.onHide();
       })
       .catch(error => {
         console.log(error.response);

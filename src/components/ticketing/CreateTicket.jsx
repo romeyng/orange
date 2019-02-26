@@ -10,6 +10,8 @@ import axios from "axios";
 import DatePicker from "react-date-picker";
 import NewCustomerForm from "../administrative/NewCustomerForm";
 import CustomerLookup from "../administrative/CustomerLookup";
+import CustomersDropDown from "../administrative/CustomersDropDown";
+
 class CreateTicket extends Component {
   constructor(props) {
     super(props);
@@ -86,6 +88,9 @@ class CreateTicket extends Component {
       [name]: value
     });
   }
+  handleCustomer = value => {
+    this.setState({ customerID: value });
+  };
   dateCreated(date) {
     this.setState({ dateCreated: date });
   }
@@ -110,99 +115,79 @@ class CreateTicket extends Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <CustomerLookup
-            show={this.state.showCustomerLookup}
-            onHide={modalClose}
-          />
           <form>
             <div className="row">
               <div className="bgc-white bd col-6">
                 <h6 className="c-grey-900">Customer Details</h6>
-                <div className="mT-30">
-                  <div className="form-row">
-                    <div className="form-group input-group input-group-lg col">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="customerName"
-                        placeholder="Flight/ Customer Name"
-                        name="customerName"
-                        onChange={this.handleChange}
-                        value={this.customerName}
-                        readOnly
-                      />
-                    </div>
-                    <div className="input-group-append">
-                      <button
-                        className="ti-search form-control form-control-lg btn btn-info "
-                        onClick={this.customerLookup}
-                      />
-                    </div>
+                <div className="my-2 py-2">
+                  <div className="col">
+                    <CustomersDropDown
+                      classList="custom-select form-control form-control-lg p-5"
+                      selectedcustomer={this.handleCustomer}
+                    />
                   </div>
-                  <div className="form-row">
-                    <div className="form-group col">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="tailNumnber"
-                        placeholder="Tail #"
-                        name="tailNo"
-                        onChange={this.handleChange}
-                        value={this.tailNo}
-                      />
-                    </div>
+                </div>
+                <div className="row my-2 py-2">
+                  <div className="form-group col-4 pl-4">
+                    <input
+                      type="text"
+                      className="form-control form-control-lg"
+                      id="tailNumnber"
+                      placeholder="Tail #"
+                      name="tailNo"
+                      onChange={this.handleChange}
+                      value={this.tailNo}
+                    />
                   </div>
-                  <div className="form-row">
-                    <div className="form-group col-4 p-2">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="origin"
-                        placeholder="Origin"
-                        name="origin"
-                        onChange={this.handleChange}
-                      />
+                </div>
+                <div className="form-row">
+                  <div className="form-group col-4 p-2">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="origin"
+                      placeholder="Origin"
+                      name="origin"
+                      onChange={this.handleChange}
+                    />
 
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="destination"
-                        placeholder="Destination"
-                        name="destination"
-                        onChange={this.handleChange}
-                      />
-                    </div>
-
-                    <div className="form-group col-7 p-2 ">
-                      <DatePicker
-                        onChange={this.dateCreated}
-                        value={this.state.dateCreated}
-                        name="dateCreated"
-                        className="mb-1"
-                      />
-
-                      <DatePicker
-                        onChange={this.dateComplete}
-                        value={this.state.dateComplete}
-                        name="dateComplete"
-                        className="mt-1"
-                      />
-                    </div>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="destination"
+                      placeholder="Destination"
+                      name="destination"
+                      onChange={this.handleChange}
+                    />
                   </div>
-                  <div className="form-row">
-                    <div className="form-control col-3 border-0">
-                      Pilot Name
-                    </div>
-                    <div className="form-group col-9">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="pilot"
-                        placeholder=""
-                        name="pilot"
-                        onChange={this.handleChange}
-                      />
-                    </div>
+
+                  <div className="form-group col-7 p-2 ">
+                    <DatePicker
+                      onChange={this.dateCreated}
+                      value={this.state.dateCreated}
+                      name="dateCreated"
+                      className="mb-1"
+                    />
+
+                    <DatePicker
+                      onChange={this.dateComplete}
+                      value={this.state.dateComplete}
+                      name="dateComplete"
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-control col-3 border-0">Pilot Name</div>
+                  <div className="form-group col-9">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="pilot"
+                      placeholder=""
+                      name="pilot"
+                      onChange={this.handleChange}
+                    />
                   </div>
                 </div>
               </div>
@@ -310,47 +295,62 @@ class CreateTicket extends Component {
               </div>
             </div>
             <div className="row">
-              <div className="bgc-white bd col">
+              <div className="bgc-white border-right col-2">
                 <h6 className="c-grey-900">Billing</h6>
-                <div className="mT-30">
-                  <div className="form-row ">
+                <div className="mT-10">
+                  <div className="col-4 p-5">
                     <div className="form-group input-group input-group-lg mx-auto">
-                      <div className="form-check form-check-inline">
+                      <div className="form-check mx-1">
                         <input
                           className="form-check-input"
                           type="radio"
                           id="chkCash"
                           value="cash"
+                          name="payment_type"
+                          onChange={this.handleChange}
                         />
-                        <label htmlFor="chkCash">Cash</label>
-
+                        <label className="form-check-label" htmlFor="chkCash">
+                          Cash
+                        </label>
+                      </div>
+                      <div className="form-check mx-1">
                         <input
                           className="form-check-input"
                           type="radio"
                           id="chkCheque"
                           value="cheque"
+                          name="payment_type"
+                          onChange={this.handleChange}
                         />
-
+                        <label className="form-check-label" htmlFor="chkCheque">
+                          Cheque
+                        </label>
+                      </div>
+                      <div className="form-check mx-1">
                         <input
                           className="form-check-input"
                           type="radio"
                           id="chkCard"
                           value="card"
+                          name="payment_type"
+                          onChange={this.handleChange}
                         />
-                        <label htmlFor="chkCard">Card</label>
-                        <label htmlFor="chkCheque">Cheque</label>
+                        <label className="form-check-label" htmlFor="chkCard">
+                          Card
+                        </label>
                       </div>
-                      <div className="form-check form-check-inline" />
-                      <div className="form-check form-check-inline" />
                     </div>
                   </div>
                 </div>
+              </div>
+              <div className="col- 4 px-2">
+                <h6 className="c-grey-900">Payment Status</h6>
+                <BillingDetail payment_type={this.state.payment_type} />
               </div>
             </div>
           </form>
         </Modal.Body>
         <Modal.Footer>
-          
           <button
             className="btn btn-lg btn-primary "
             onClick={this.postNewFuelTicket}
@@ -364,3 +364,18 @@ class CreateTicket extends Component {
 }
 
 export default CreateTicket;
+
+export const BillingDetail = props => {
+  let invoice = (
+    <div className="form-group">
+      <label className="mr-1" htmlFor="invoice_no">
+        Invoice No
+      </label>
+      <input id="form-control invoice_no form-" type="text" />
+    </div>
+  );
+
+  let card = <div />;
+
+  return invoice;
+};

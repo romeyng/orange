@@ -2,7 +2,8 @@ import React, { Component } from "react";
 
 import { Link } from "react-router-dom";
 class Sidebar extends Component {
-  state = {};
+  //WARNING! To be deprecated in React v17. Use componentDidMount instead.
+
   render() {
     return (
       // {/* // <!-- #Left Sidebar ==================== --> */}
@@ -20,9 +21,7 @@ class Sidebar extends Component {
                       </div>
                     </div>
                     <div className="peer peer-greed">
-                      <h5 className="lh-1 mB-0 logo-text">
-                        {this.state.xxx} CAM FUEL
-                      </h5>
+                      <h5 className="lh-1 mB-0 logo-text">CAM FUEL</h5>
                     </div>
                   </div>
                 </a>
@@ -47,13 +46,21 @@ class Sidebar extends Component {
                 <span className="title">Tickets</span>
               </Link>
             </li>
-            <li className="nav-item">
+            <li className="nav-item dropdown">
               <Link to="/inventory">
                 <span className="icon-holder">
                   <i className="c-brown-500 ti-package" />
                 </span>
                 <span className="title">Fuel Recon</span>
               </Link>
+              <ul className="dropdown-menu">
+                <li>
+                  <a href="google-maps.html">Google Map</a>
+                </li>
+                <li>
+                  <a href="vector-maps.html">Vector Map</a>
+                </li>
+              </ul>
             </li>
             <li className="nav-item">
               <Link to="/rates">
