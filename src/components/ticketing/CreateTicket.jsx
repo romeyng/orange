@@ -32,13 +32,17 @@ class CreateTicket extends Component {
       userID: 1,
       status: "",
       prepaid: false,
-      showCustomerLookup: false
+      showCustomerLookup: false,
+      paidstatus: false,
+      paidstyle: "btn btn-lg btn-block btn-secondary",
+      paidtext: "OUTSTANDING"
     };
     this.postNewFuelTicket = this.postNewFuelTicket.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.dateCreated = this.dateCreated.bind(this);
     this.dateComplete = this.dateComplete.bind(this);
     this.customerLookup = this.customerLookup.bind(this);
+    this.paidToggle = this.paidToggle.bind(this);
   }
   customerLookup(e) {
     e.preventDefault();
@@ -79,14 +83,21 @@ class CreateTicket extends Component {
 
   handleChange(event) {
     //function changes state as form values are editted
-    console.log(event);
+
     const target = event.target;
     const value = target.value;
     const name = target.name;
-
-    this.setState({
-      [name]: value
-    });
+    console.log(target);
+    if (target.type == "checkbox") {
+      this.setState({ [name]: target.checked });
+    } else {
+      this.setState({
+        [name]: value
+      });
+    }
+    if (target.name == "meterBefore" || target.name == "meterAfter") {
+      this.calcMeter();
+    }
   }
   handleCustomer = value => {
     this.setState({ customerID: value });
@@ -98,6 +109,26 @@ class CreateTicket extends Component {
     this.setState({ dateComplete: date });
   }
   componentDidUpdate(prevProps, prevState) {}
+  paidToggle(e, prevState) {
+    e.preventDefault();
+    this.setState({ paidstatus: !this.state.paidstatus });
+    if (!this.state.paidstatus == true) {
+      this.setState({
+        paidstyle: "btn btn-lg btn-block btn-success",
+        paidtext: "PAID"
+      });
+    } else {
+      this.setState({
+        paidstyle: "btn btn-lg btn-block btn-secondary",
+        paidtext: "OUTSTANDING"
+      });
+    }
+  }
+  calcMeter = () => {
+    let diff =
+      parseFloat(this.state.meterBefore) - parseFloat(this.state.meterAfter);
+    this.setState({ meterActual: diff });
+  };
 
   render() {
     let modalClose = () => this.setState({ showCustomerLookup: false });
@@ -283,6 +314,7 @@ class CreateTicket extends Component {
                         placeholder="0"
                         name="meterActual"
                         id="meterActual"
+                        onChange={this.handleChange}
                       >
                         {this.state.meterActual}
                       </div>
@@ -295,8 +327,35 @@ class CreateTicket extends Component {
               </div>
             </div>
             <div className="row">
-              <div className="bgc-white border-right col-2">
-                <h6 className="c-grey-900">Billing</h6>
+              <div className=" col-3 p-2 mL-4">
+                <h6 className="text-body">Ticket Status</h6>
+                <div className="form-check  form-control-lg">
+                  <input
+                    className="form-check-input "
+                    type="checkbox"
+                    name="paymentstatus"
+                    id="paymentstatus"
+                    onClick={this.handleChange}
+                  />
+                  <label className="form-check-label" for="defaultCheck1">
+                    Paid
+                  </label>
+                </div>
+                <div className="form-check  form-control-lg">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="ticketstatus"
+                    name="ticketstatus"
+                    onClick={this.handleChange}
+                  />
+                  <label className="form-check-label" for="defaultCheck2">
+                    Complete
+                  </label>
+                </div>
+              </div>
+              <div className="bgc-white col-2">
+                <h6 className="">Payment Info</h6>
                 <div className="mT-10">
                   <div className="col-4 p-5">
                     <div className="form-group input-group input-group-lg mx-auto">
@@ -344,8 +403,14 @@ class CreateTicket extends Component {
                 </div>
               </div>
               <div className="col- 4 px-2">
-                <h6 className="c-grey-900">Payment Status</h6>
-                <BillingDetail payment_type={this.state.payment_type} />
+                <h6 className="c-grey-900" />
+                <BillingDetail
+                  payment_type={this.state.payment_type}
+                  handleChange={this.handleChange}
+                />
+              </div>
+              <div className="col-2">
+                <h6>Ticket Status</h6>
               </div>
             </div>
           </form>
@@ -371,11 +436,32 @@ export const BillingDetail = props => {
       <label className="mr-1" htmlFor="invoice_no">
         Invoice No
       </label>
-      <input id="form-control invoice_no form-" type="text" />
+      <input
+        name="invoiceno"
+        id="form-control invoice_no form-control-sm"
+        type="text"
+        onChange={props.handleChange}
+      />
     </div>
   );
 
-  let card = <div />;
-
-  return invoice;
+  let card = (
+    <div>
+      <select
+        className="custom-select form-control form-control-sm"
+        name="card_type"
+        onChange={props.handleChange}
+      >
+        <option value="0">Card Type</option>
+        <option value="visa">Visa</option>
+        <option value="mastercard">MasterCard</option>
+        <option value="amex">AMEX</option>
+      </select>
+    </div>
+  );
+  if (props.payment_type == "card") {
+    return card;
+  } else {
+    return invoice;
+  }
 };
