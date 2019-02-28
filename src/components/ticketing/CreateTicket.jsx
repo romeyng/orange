@@ -11,14 +11,14 @@ import DatePicker from "react-date-picker";
 import NewCustomerForm from "../administrative/NewCustomerForm";
 import CustomerLookup from "../administrative/CustomerLookup";
 import CustomersDropDown from "../administrative/CustomersDropDown";
+import { format } from "util";
 
 class CreateTicket extends Component {
   constructor(props) {
     super(props);
     this.state = {
       customerName: "",
-      dateCreated: new Date(),
-      dateComplete: new Date(),
+
       fuelLocation: "Fuel Location",
       fuelType: "Fuel Type",
       meterActual: 0,
@@ -27,8 +27,8 @@ class CreateTicket extends Component {
       requestQuantity: 0,
       paymentMethod: "",
       supervisor: "",
-      mtow: "",
-      customerID: 1,
+      mtow: 0,
+
       userID: 1,
       status: "",
       prepaid: false,
@@ -39,8 +39,7 @@ class CreateTicket extends Component {
     };
     this.postNewFuelTicket = this.postNewFuelTicket.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.dateCreated = this.dateCreated.bind(this);
-    this.dateComplete = this.dateComplete.bind(this);
+
     this.customerLookup = this.customerLookup.bind(this);
     this.paidToggle = this.paidToggle.bind(this);
   }
@@ -52,8 +51,9 @@ class CreateTicket extends Component {
   }
   postNewFuelTicket(e) {
     e.preventDefault();
+
     axios
-      .post(`http://52.15.62.203:8080/newticket/fuelticket`, {
+      .post(`http://52.15.62.203:8080/createuplift`, {
         fuelType: this.state.fuelType,
         fuelLocation: this.state.fuelLocation,
         userID: this.state.userID,
@@ -70,7 +70,10 @@ class CreateTicket extends Component {
         paymentMethod: this.state.paymentMethod,
         meterBefore: this.state.meterBefore,
         meterAfter: this.state.meterAfter,
-        status: this.state.status
+        dateCreated: this.getFormattedDate(this.state.dateCreated),
+        dateCompleted: this.getFormattedDate(this.state.dateCompleted),
+        ticketStatus: this.state.ticketstatus,
+        paymentStatus: this.state.paymentStatus
       })
       .then(response => {
         console.log(response);
@@ -81,13 +84,25 @@ class CreateTicket extends Component {
     console.log("sentpost req");
   }
 
+  componentDidMount() {
+    axios
+      .get("http://52.15.62.203:8080/genreconbalance")
+      .then(({ data }) => {
+        console.log(data[0].balance);
+        this.setState({ balance: data[0].balance });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
   handleChange(event) {
     //function changes state as form values are editted
 
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    console.log(target);
+
     if (target.type == "checkbox") {
       this.setState({ [name]: target.checked });
     } else {
@@ -99,15 +114,24 @@ class CreateTicket extends Component {
       this.calcMeter();
     }
   }
-  handleCustomer = value => {
-    this.setState({ customerID: value });
+  getFormattedDate = rawdate => {
+    let year = this.rawdate.getFullYear();
+
+    let month = (1 + this.rawdate.getMonth()).toString();
+    month = month.length > 1 ? month : "0" + month;
+
+    let day = this.rawdate.getDate().toString();
+    day = day.length > 1 ? day : "0" + day;
+
+    return year + "/" + month + "/" + day;
   };
-  dateCreated(date) {
-    this.setState({ dateCreated: date });
-  }
-  dateComplete(date) {
-    this.setState({ dateComplete: date });
-  }
+
+  handleCustomer = value => this.setState({ customerID: value });
+
+  dateCreate = dateCreated => this.setState({ dateCreated });
+
+  dateComplete = dateComplete => this.setState({ dateComplete });
+
   componentDidUpdate(prevProps, prevState) {}
   paidToggle(e, prevState) {
     e.preventDefault();
@@ -124,11 +148,8 @@ class CreateTicket extends Component {
       });
     }
   }
-  calcMeter = () => {
-    let diff =
-      parseFloat(this.state.meterBefore) - parseFloat(this.state.meterAfter);
-    this.setState({ meterActual: diff });
-  };
+  calcMeter = () =>
+    parseFloat(this.state.meterBefore) - parseFloat(this.state.meterAfter);
 
   render() {
     let modalClose = () => this.setState({ showCustomerLookup: false });
@@ -194,7 +215,7 @@ class CreateTicket extends Component {
 
                   <div className="form-group col-7 p-2 ">
                     <DatePicker
-                      onChange={this.dateCreated}
+                      onChange={this.dateCreate}
                       value={this.state.dateCreated}
                       name="dateCreated"
                       className="mb-1"
@@ -316,7 +337,7 @@ class CreateTicket extends Component {
                         id="meterActual"
                         onChange={this.handleChange}
                       >
-                        {this.state.meterActual}
+                        {this.calcMeter()}
                       </div>
                       <div className="input-group-append">
                         <span className="input-group-text">us. gal</span>
@@ -337,7 +358,7 @@ class CreateTicket extends Component {
                     id="paymentstatus"
                     onClick={this.handleChange}
                   />
-                  <label className="form-check-label" for="defaultCheck1">
+                  <label className="form-check-label" htmlFor="paymentstatus">
                     Paid
                   </label>
                 </div>
@@ -349,7 +370,7 @@ class CreateTicket extends Component {
                     name="ticketstatus"
                     onClick={this.handleChange}
                   />
-                  <label className="form-check-label" for="defaultCheck2">
+                  <label className="form-check-label" htmlFor="ticketstatus">
                     Complete
                   </label>
                 </div>

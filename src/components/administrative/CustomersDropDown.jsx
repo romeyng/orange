@@ -7,7 +7,7 @@ class CustomersDropDown extends Component {
     super(props);
     this.state = {
       customerOptions: [],
-      customerID: "0",
+
       addCustomer: false
     };
   }
@@ -18,7 +18,8 @@ class CustomersDropDown extends Component {
   getCustomers = () => {
     console.log("getcustomers called");
     axios.get("http://52.15.62.203:8080/getcustomers").then(({ data }) => {
-      var arr = ["<option value='0'>Select customer</option>"];
+      console.log(data);
+      var arr = [];
       for (var k = 0; k < data.length; k++) {
         arr.push(
           <option key={data[k].customerID} value={data[k].customerID}>
@@ -44,11 +45,11 @@ class CustomersDropDown extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-
+    console.log(value);
     this.setState({
       [name]: value
     });
-    this.props.selectedcustomer(this.state.customerID);
+    this.props.selectedcustomer(value);
   };
   render() {
     let modalClose = () => this.setState({ addCustomer: false });
@@ -58,7 +59,6 @@ class CustomersDropDown extends Component {
           <select
             className={this.props.classList}
             name="customerID"
-            value={this.state.customerOptions[0]}
             onChange={this.handleChange}
           >
             {this.state.customerOptions}
