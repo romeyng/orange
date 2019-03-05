@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import moment from "moment";
 const $ = require("jquery");
 $.DataTable = require("datatables.net");
 class TicketsTable extends Component {
@@ -33,12 +34,15 @@ class TicketsTable extends Component {
       data: this.state.payload,
       columns: [
         { title: "Ticket No.", data: "fuelrequestID" },
-        { title: "Date Created", data: "arrival_date" },
+        {
+          title: "Date Created",
+          data: "arrival_date",
+          render: () => moment(this.data).format("MM-DD-YYYY")
+        },
         {
           title: "Due Date",
           data: "required_on",
-          type: "datetime",
-          format: "M/D/YYYY"
+          render: () => moment(this.data).format("MM-DD-YYYY")
         },
         { title: "Client Name", data: "customerID" },
         { title: "Tail No", data: "tail_no" },

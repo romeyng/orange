@@ -8,10 +8,8 @@ import Button from "react-bootstrap/Button";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
 import DatePicker from "react-date-picker";
-import NewCustomerForm from "../administrative/NewCustomerForm";
-import CustomerLookup from "../administrative/CustomerLookup";
+
 import CustomersDropDown from "../administrative/CustomersDropDown";
-import { format } from "util";
 
 class CreateTicket extends Component {
   constructor(props) {
@@ -28,7 +26,8 @@ class CreateTicket extends Component {
       paymentMethod: "",
       supervisor: "",
       mtow: 0,
-
+      dateCreated: new Date(),
+      dateComplete: new Date(),
       userID: 1,
       status: "",
       prepaid: false,
@@ -39,7 +38,7 @@ class CreateTicket extends Component {
     };
     this.postNewFuelTicket = this.postNewFuelTicket.bind(this);
     this.handleChange = this.handleChange.bind(this);
-
+    this.getFormattedDate = this.getFormattedDate.bind(this);
     this.customerLookup = this.customerLookup.bind(this);
     this.paidToggle = this.paidToggle.bind(this);
   }
@@ -71,12 +70,13 @@ class CreateTicket extends Component {
         meterBefore: this.state.meterBefore,
         meterAfter: this.state.meterAfter,
         dateCreated: this.getFormattedDate(this.state.dateCreated),
-        dateCompleted: this.getFormattedDate(this.state.dateCompleted),
+        dateComplete: this.getFormattedDate(this.state.dateComplete),
         ticketStatus: this.state.ticketstatus,
         paymentStatus: this.state.paymentStatus
       })
       .then(response => {
         console.log(response);
+        this.props.onHide();
       })
       .catch(error => {
         console.log(error.response);
@@ -114,17 +114,17 @@ class CreateTicket extends Component {
       this.calcMeter();
     }
   }
-  getFormattedDate = rawdate => {
-    let year = this.rawdate.getFullYear();
+  getFormattedDate(rawdate) {
+    let year = rawdate.getFullYear();
 
-    let month = (1 + this.rawdate.getMonth()).toString();
+    let month = (1 + rawdate.getMonth()).toString();
     month = month.length > 1 ? month : "0" + month;
 
-    let day = this.rawdate.getDate().toString();
+    let day = rawdate.getDate().toString();
     day = day.length > 1 ? day : "0" + day;
 
     return year + "/" + month + "/" + day;
-  };
+  }
 
   handleCustomer = value => this.setState({ customerID: value });
 
@@ -429,9 +429,6 @@ class CreateTicket extends Component {
                   payment_type={this.state.payment_type}
                   handleChange={this.handleChange}
                 />
-              </div>
-              <div className="col-2">
-                <h6>Ticket Status</h6>
               </div>
             </div>
           </form>
