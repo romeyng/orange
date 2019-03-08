@@ -6,8 +6,8 @@ class TicketingButtons extends Component {
   constructor(...args) {
     super(...args);
 
-    this.state = { modalShow: false };
-    this.state = { showSupplyForm: false };
+    this.state = { modalShow: false, showSupplyForm: false, receiveDate: new Date()};
+    
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -32,6 +32,7 @@ class TicketingButtons extends Component {
       modalShow: true
     });
   };
+  dateChange = receiveDate => this.setState({ receiveDate });
 
   showSupplyForm = () => {
     this.setState({ showSupplyForm: true });
@@ -62,6 +63,8 @@ class TicketingButtons extends Component {
           <SupplyTicket
             show={this.state.showSupplyForm}
             onChange={this.handleChange}
+            dateChange= {this.dateChange}
+            receiveDate={this.state.receiveDate}
             onHide={modalClose}
           />
         </div>

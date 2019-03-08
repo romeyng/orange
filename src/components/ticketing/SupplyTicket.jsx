@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
+import DatePicker from "react-date-picker";
 
 export const SupplyTicket = props => {
   let supplyForm = (
@@ -19,22 +20,31 @@ export const SupplyTicket = props => {
           <div className="bgc-white bd m-3 p-4">
             <div className="row">
               <div className="col">
-                <label htmlFor="supplier">Supplier</label>
+                
                 <input
                   type="text"
-                  className="form-control form-control-lg"
+                  className="form-control form-control-lg mB-1"
                   id="supplier"
                   name="supplier"
                   onChange={props.handleChange}
                 />
-                <label htmlFor="quantity">Quantity</label>
+                <label htmlFor="supplier">Supplier</label>
+                
                 <input
                   type="text"
-                  className="form-control form-control-lg"
+                  className="form-control form-control-lg mB-1"
                   id="quantity"
                   name="quantity"
                   onChange={props.handleChange}
                 />
+                <label htmlFor="quantity">Quantity</label>
+                
+                <DatePicker 
+                      onChange={props.dateChange}
+                      value={props.receiveDate}
+                      name="receiveDate"
+                      className="mt-1 form-control form-control-lg mB-1" />
+                      <label htmlFor="receiveDate">Date Received</label>
               </div>
             </div>
           </div>
