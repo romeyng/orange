@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import InventoryContent from "./InventoryContent";
 import { SupplyTicket } from "../ticketing/SupplyTicket";
-import axios from "axios";
 
-class Inventory extends Component {
+class PrepaidRecon extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,8 +11,6 @@ class Inventory extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
   }
-
-  componentDidMount() {}
 
   handleChange(event) {
     event.preventDefault();
@@ -32,17 +29,6 @@ class Inventory extends Component {
   showSupplyForm = e => {
     e.preventDefault();
     this.setState({ showSupplyForm: true });
-  };
-  dateChange = dateReceived => this.setState({ dateReceived });
-
-  submitSupply = () => {
-    axios.post(`http://52.15.62.203:8080/createsupply`, {
-      dateReceived: this.state.dateReceived,
-      supplier: this.state.supplier,
-      quantity: this.state.quantity,
-      fuelLocation: this.state.fuelLocation,
-      fuelType: this.state.fuelType
-    });
   };
 
   render() {
@@ -79,14 +65,13 @@ class Inventory extends Component {
               </div>
             </form>
           </div>
-          <InventoryContent selectedLocation={this.state.selectedLocation} />
+          {/* <PrepaidContent selectedLocation={this.state.selectedLocation} /> */}
           <SupplyTicket
             show={this.state.showSupplyForm}
             onChange={this.handleChange}
             dateChange={this.dateChange}
             receiveDate={this.state.receiveDate}
             onHide={modalClose}
-            submitSupply={this.submitSupply}
           />
         </div>
       </main>
@@ -94,4 +79,4 @@ class Inventory extends Component {
   }
 }
 
-export default Inventory;
+export default PrepaidRecon;

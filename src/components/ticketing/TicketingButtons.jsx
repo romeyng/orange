@@ -6,8 +6,12 @@ class TicketingButtons extends Component {
   constructor(...args) {
     super(...args);
 
-    this.state = { modalShow: false, showSupplyForm: false, receiveDate: new Date()};
-    
+    this.state = {
+      modalShow: false,
+
+      receiveDate: new Date()
+    };
+
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -34,12 +38,8 @@ class TicketingButtons extends Component {
   };
   dateChange = receiveDate => this.setState({ receiveDate });
 
-  showSupplyForm = () => {
-    this.setState({ showSupplyForm: true });
-  };
   render() {
-    let modalClose = () =>
-      this.setState({ modalShow: false, showSupplyForm: false });
+    let modalClose = () => this.setState({ modalShow: false });
     return (
       <div className="container-fluid">
         <div className="row">
@@ -51,23 +51,8 @@ class TicketingButtons extends Component {
               New Uplift Ticket
             </button>
           </div>
-          <div className="p-3">
-            <button
-              className="btn btn-lg btn-warning"
-              onClick={this.showSupplyForm}
-            >
-              New Supply Ticket
-            </button>
-          </div>
-          <CreateTicket show={this.state.modalShow} onHide={modalClose} />
-          <SupplyTicket
-            show={this.state.showSupplyForm}
-            onChange={this.handleChange}
-            dateChange= {this.dateChange}
-            receiveDate={this.state.receiveDate}
-            onHide={modalClose}
-          />
         </div>
+        <CreateTicket show={this.state.modalShow} onHide={modalClose} />
       </div>
     );
   }
