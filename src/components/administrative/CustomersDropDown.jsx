@@ -17,7 +17,7 @@ class CustomersDropDown extends Component {
 
   getCustomers = () => {
     console.log("getcustomers called");
-    axios.get("http://52.15.62.203:8080/getcustomers").then(({ data }) => {
+    axios.post("http://52.15.62.203:8080/getcustomers").then(({ data }) => {
       console.log(data);
       var arr = [];
       for (var k = 0; k < data.length; k++) {

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import DatePicker from "react-date-picker";
-import { PrepaidCustomer } from "../lookups/dropdowns";
+
 
 export const SupplyTicket = props => {
   let supplyForm = (
@@ -22,8 +22,8 @@ export const SupplyTicket = props => {
             <div className="form-row">
               <div className="col">
                 <DatePicker
-                  onChange={props.dateChange}
-                  value={props.receiveDate}
+                  onChange={props.datechange}
+                  value={props.dateval}
                   name="receiveDate"
                   className="mt-1 form-control form-control-lg mB-1 border-0"
                 />
@@ -70,6 +70,14 @@ export const SupplyTicket = props => {
                   <option value="2">AvGas 100</option>
                   <option value="3">Diesel</option>
                 </select>
+                <input
+                  type="text"
+                  className="form-control form-control-lg mB-1"
+                  id="supplyref"
+                  name="supplyref"
+                  onChange={props.onChange}
+                />
+                <label htmlFor="supplyref">Invoice/Receipt No</label>
               </div>
               <div className="form-group col-9" />
             </div>
@@ -77,7 +85,7 @@ export const SupplyTicket = props => {
 
           <button
             className="btn btn-primary btn-lg"
-            onClick={props.submitSupply}
+            onClick={props.submitsupply}
           >
             Submit
           </button>

@@ -3,6 +3,8 @@ import { Modal } from "react-bootstrap";
 import axios from "axios";
 import CustomerLookup from "./CustomerLookup";
 import CustomersDropDown from "./CustomersDropDown";
+import {Locations} from "../reusables/dropdowns";
+
 
 //TODO: Build form input fields, create post request
 class AddRate extends Component {
@@ -11,9 +13,9 @@ class AddRate extends Component {
     this.state = {
       baseRate: "",
       markupType: "choose",
-      fixedRate: "",
-      pctRate: "",
-      tax: "",
+      fixed: 0,
+      pct:0,
+      tax: 0,
       multiplier: "",
       unitDesc: "",
       rateDesc: "",
@@ -22,7 +24,10 @@ class AddRate extends Component {
       locationID: "",
       fuelType: "choose",
       locOptions: [],
-      customerOptions: [],
+      fixmark: true,
+      pctmark: true,
+      final: 0,
+      
       showCustomerLookup: false
     };
 
@@ -44,10 +49,37 @@ class AddRate extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
+    if (name=="markupType"){
+      if (value=="fixed"){
+        this.setState({fixmark: false, pctmark: true, pct: '0'})
+        
+      }else{
+        this.setState({fixmark: true, pctmark: false, fixed: '0'})
+      }
+      
+    
+    }
 
     this.setState({
       [name]: value
     });
+  }
+  calculateFinalRate=(event)=>{
+    event.preventDefault();
+    let final = 0;
+    if (this.state.markupType=="pct"){
+      
+      let markup= parseFloat(this.state.baseRate)*(parseFloat(this.state.pct)/100)
+      final = parseFloat(this.state.baseRate) + markup
+      
+    }else{
+      
+      final = parseFloat(this.state.baseRate)+parseFloat(this.state.fixed);
+    }
+    final+=parseFloat(this.state.tax);
+   
+    
+    this.setState({final: final.toFixed(2)})
   }
 
   componentDidMount() {
@@ -107,16 +139,7 @@ class AddRate extends Component {
                     placeholder=""
                   />
                 </div>
-                <div className="col-2">
-                  <label htmlFor="locationID">Location</label>
-                  <select
-                    className="custom-select form-control form-control-lg"
-                    name="locationID"
-                    onChange={this.handleChange}
-                  >
-                    {this.state.locOptions}
-                  </select>
-                </div>
+                <Locations />
               </div>
             </div>
 
@@ -198,14 +221,14 @@ class AddRate extends Component {
                     name="unitDesc"
                     onChange={this.handleChange}
                   >
-                    {this.state.unitDesc}
+                    <option value="1">per gal</option>
                   </select>
                 </div>
                 <div className="col-3 ">
-                  <label htmlFor="locationID">Markup Options </label>
+                  <label htmlFor="markupType">Markup Options </label>
                   <select
                     className="custom-select form-control form-control-lg"
-                    name="unitDesc"
+                    name="markupType"
                     onChange={this.handleChange}
                   >
                     <option value="0">none</option>
@@ -216,25 +239,58 @@ class AddRate extends Component {
                 <div className="col-2">
                   <label htmlFor="fixed">Fixed Rate </label>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control form-control-lg"
                     name="fixed"
                     onChange={this.handleChange}
                     placeholder=""
-                    disabled
+                    disabled= {this.state.fixmark}
+                    value = {this.state.fixed}
+                    
                   />
                 </div>
                 <div className="col-2">
                   <label htmlFor="pct">Percent Rate </label>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control form-control-lg"
                     name="pct"
+                    value={this.state.pct}
                     onChange={this.handleChange}
                     placeholder=""
-                    disabled
+                    disabled= {this.state.pctmark}
+                    
                   />
                 </div>
+              </div>
+              <div className="row mt-1 ">
+              <div className="col-2">
+              <label htmlFor="tax">Tax</label>
+              <input 
+                type="number" 
+                className="form-control form-control-lg"
+                name="tax"
+                onChange={this.handleChange}
+                />
+              </div>
+              <div className="col-2">
+              <label htmlFor="storage">Storage Fee</label>
+              <input 
+                type="number" 
+                className="form-control form-control-lg"
+                name="storage"
+                onChange={this.handleChange}
+                />
+              </div>
+              <div className="col-2"></div>
+              <div className="col-2  text-info my-auto ">
+                  <button onClick={this.calculateFinalRate}> Calculate Final Rate</button>
+                </div>
+                
+                <div className="col bg-info my-auto mx-auto">
+                  <FinalRate final={this.state.final} />
+                </div>
+                
               </div>
             </div>
 
@@ -252,3 +308,7 @@ class AddRate extends Component {
 }
 
 export default AddRate;
+
+export const FinalRate =props=>{
+  return <h4 className="text-white">${props.final} per us gal. </h4>;
+}

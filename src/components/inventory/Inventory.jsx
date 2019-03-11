@@ -3,14 +3,19 @@ import InventoryContent from "./InventoryContent";
 import { SupplyTicket } from "../ticketing/SupplyTicket";
 import axios from "axios";
 
+
+
+
 class Inventory extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedLocation: "0",
-      showSupplyForm: false
+      showSupplyForm: false,
+      dateReceived: new Date()
     };
     this.handleChange = this.handleChange.bind(this);
+    
   }
 
   componentDidMount() {}
@@ -33,15 +38,38 @@ class Inventory extends Component {
     e.preventDefault();
     this.setState({ showSupplyForm: true });
   };
+
+
   dateChange = dateReceived => this.setState({ dateReceived });
 
-  submitSupply = () => {
+  getFormattedDate=(rawdate)=> {
+    let year = rawdate.getFullYear();
+
+    let month = (1 + rawdate.getMonth()).toString();
+    month = month.length > 1 ? month : "0" + month;
+
+    let day = rawdate.getDate().toString();
+    day = day.length > 1 ? day : "0" + day;
+
+    return year + "/" + month + "/" + day;
+  }
+
+  submitSupply = (e) => {
+    e.preventDefault();
     axios.post(`http://52.15.62.203:8080/createsupply`, {
-      dateReceived: this.state.dateReceived,
+      dateReceived: this.getFormattedDate(this.state.dateReceived),
       supplier: this.state.supplier,
       quantity: this.state.quantity,
       fuelLocation: this.state.fuelLocation,
-      fuelType: this.state.fuelType
+      fuelType: this.state.fuelType,
+      customerID: '0',
+      supplyref: this.state.supplyref})
+      .then(response=>{
+        console.log(response);
+        this.setState({showSupplyForm: false})
+      })
+      .catch(error => {
+        console.log(error.response);
     });
   };
 
@@ -83,10 +111,11 @@ class Inventory extends Component {
           <SupplyTicket
             show={this.state.showSupplyForm}
             onChange={this.handleChange}
-            dateChange={this.dateChange}
-            receiveDate={this.state.receiveDate}
+            datechange={this.dateChange}
+            dateval={this.state.dateReceived}
             onHide={modalClose}
-            submitSupply={this.submitSupply}
+            submitsupply={this.submitSupply}
+            
           />
         </div>
       </main>
