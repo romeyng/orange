@@ -3,8 +3,7 @@ import { Modal } from "react-bootstrap";
 import axios from "axios";
 import CustomerLookup from "./CustomerLookup";
 import CustomersDropDown from "./CustomersDropDown";
-import {Locations} from "../reusables/dropdowns";
-
+import { Locations, PrepaidCustomer } from "../reusables/dropdowns";
 
 //TODO: Build form input fields, create post request
 class AddRate extends Component {
@@ -14,7 +13,7 @@ class AddRate extends Component {
       baseRate: "",
       markupType: "choose",
       fixed: 0,
-      pct:0,
+      pct: 0,
       tax: 0,
       multiplier: "",
       unitDesc: "",
@@ -24,10 +23,11 @@ class AddRate extends Component {
       locationID: "",
       fuelType: "choose",
       locOptions: [],
-      fixmark: true,
-      pctmark: true,
+      fixmark: false,
+      pctmark: false,
       final: 0,
-      
+      rateIsPrepaid: "off",
+
       showCustomerLookup: false
     };
 
@@ -49,38 +49,40 @@ class AddRate extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    if (name=="markupType"){
-      if (value=="fixed"){
-        this.setState({fixmark: false, pctmark: true, pct: '0'})
-        
-      }else{
-        this.setState({fixmark: true, pctmark: false, fixed: '0'})
+    if (name == "markupType") {
+      if (value == "fixed") {
+        this.setState({ fixmark: true, pctmark: false, pct: "0" });
+      } else if (value == "pct") {
+        this.setState({ fixmark: false, pctmark: true, pct: "0" });
+      } else {
+        this.setState({ fixmark: false, pctmark: false, fixed: "0" });
       }
-      
-    
     }
-
-    this.setState({
-      [name]: value
-    });
+    if (target.type == "checkbox") {
+      this.setState({ [name]: target.checked });
+    } else {
+      this.setState({
+        [name]: value
+      });
+    }
+    if (this.state.rateIsPrepaid == false) {
+      this.setState({ customerID: "" });
+    }
   }
-  calculateFinalRate=(event)=>{
+  calculateFinalRate = event => {
     event.preventDefault();
     let final = 0;
-    if (this.state.markupType=="pct"){
-      
-      let markup= parseFloat(this.state.baseRate)*(parseFloat(this.state.pct)/100)
-      final = parseFloat(this.state.baseRate) + markup
-      
-    }else{
-      
-      final = parseFloat(this.state.baseRate)+parseFloat(this.state.fixed);
+    if (this.state.markupType == "pct") {
+      let markup =
+        parseFloat(this.state.baseRate) * (parseFloat(this.state.pct) / 100);
+      final = parseFloat(this.state.baseRate) + markup;
+    } else {
+      final = parseFloat(this.state.baseRate) + parseFloat(this.state.fixed);
     }
-    final+=parseFloat(this.state.tax);
-   
-    
-    this.setState({final: final.toFixed(2)})
-  }
+    final += parseFloat(this.state.tax);
+
+    this.setState({ final: final.toFixed(2) });
+  };
 
   componentDidMount() {
     axios.get("http://52.15.62.203:8080/getlocations").then(({ data }) => {
@@ -153,8 +155,8 @@ class AddRate extends Component {
                     value={this.state.fuelType}
                     onChange={this.handleChange}
                   >
-                    <option value="Regular">Jet A1</option>
-                    <option value="Prepaid">Diesel</option>
+                    <option value="1">Jet A1</option>
+                    <option value="2">Diesel</option>
                   </select>
                 </div>
 
@@ -162,38 +164,26 @@ class AddRate extends Component {
                   Rate Type
                   <div className="form-check">
                     <input
-                      type="radio"
+                      type="checkbox"
                       className="form-check-input  "
-                      name="rateType"
-                      onChange={this.handleChange}
-                      placeholder=""
-                      id="ratereg"
-                      value="regular"
-                    />
-                    <label className="form-check-label" htmlFor="ratereg">
-                      Regular
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      type="radio"
-                      className="form-check-input  "
-                      name="rateType"
+                      name="rateIsPrepaid"
                       onChange={this.handleChange}
                       placeholder=""
                       id="ratepp"
-                      value="prepaid"
                     />
                     <label className="form-check-label" htmlFor="ratepp">
                       Prepaid
                     </label>
                   </div>
                 </div>
-                <div className="col-5">
-                  <CustomersDropDown
-                    classList="custom-select form-control form-control-lg pB-3"
-                    selectedCustomer={this.handleCustomer}
+                <div className="col">
+                  <PrepaidCustomer
+                    classList="custom-select form-control form-control-lg pB-3 mx-auto my-auto"
+                    onChange={this.handleChange}
+                    name="customerID"
+                    disabled={!this.state.rateIsPrepaid}
                   />
+                  <label htmlFor="customerID">Prepaid Customers</label>
                 </div>
               </div>
             </div>
@@ -202,7 +192,7 @@ class AddRate extends Component {
                 <div className="col-2">
                   <label htmlFor="baserate">Base Rate ($)</label>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control form-control-lg"
                     name="baseRate"
                     onChange={this.handleChange}
@@ -244,9 +234,8 @@ class AddRate extends Component {
                     name="fixed"
                     onChange={this.handleChange}
                     placeholder=""
-                    disabled= {this.state.fixmark}
-                    value = {this.state.fixed}
-                    
+                    disabled={!this.state.fixmark}
+                    value={this.state.fixed}
                   />
                 </div>
                 <div className="col-2">
@@ -258,39 +247,41 @@ class AddRate extends Component {
                     value={this.state.pct}
                     onChange={this.handleChange}
                     placeholder=""
-                    disabled= {this.state.pctmark}
-                    
+                    disabled={!this.state.pctmark}
                   />
                 </div>
               </div>
               <div className="row mt-1 ">
-              <div className="col-2">
-              <label htmlFor="tax">Tax</label>
-              <input 
-                type="number" 
-                className="form-control form-control-lg"
-                name="tax"
-                onChange={this.handleChange}
-                />
-              </div>
-              <div className="col-2">
-              <label htmlFor="storage">Storage Fee</label>
-              <input 
-                type="number" 
-                className="form-control form-control-lg"
-                name="storage"
-                onChange={this.handleChange}
-                />
-              </div>
-              <div className="col-2"></div>
-              <div className="col-2  text-info my-auto ">
-                  <button onClick={this.calculateFinalRate}> Calculate Final Rate</button>
+                <div className="col-2">
+                  <label htmlFor="tax">Tax</label>
+                  <input
+                    type="number"
+                    className="form-control form-control-lg"
+                    name="tax"
+                    onChange={this.handleChange}
+                  />
                 </div>
-                
+                <div className="col-2">
+                  <label htmlFor="storage">Storage Fee</label>
+                  <input
+                    type="number"
+                    className="form-control form-control-lg"
+                    name="storage"
+                    onChange={this.handleChange}
+                    disabled
+                  />
+                </div>
+                <div className="col-2" />
+                <div className="col-2  text-info my-auto ">
+                  <button onClick={this.calculateFinalRate}>
+                    {" "}
+                    Calculate Final Rate
+                  </button>
+                </div>
+
                 <div className="col bg-info my-auto mx-auto">
                   <FinalRate final={this.state.final} />
                 </div>
-                
               </div>
             </div>
 
@@ -309,6 +300,6 @@ class AddRate extends Component {
 
 export default AddRate;
 
-export const FinalRate =props=>{
+export const FinalRate = props => {
   return <h4 className="text-white">${props.final} per us gal. </h4>;
-}
+};
