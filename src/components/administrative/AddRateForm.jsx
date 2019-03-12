@@ -15,18 +15,18 @@ class AddRate extends Component {
       fixed: 0,
       pct: 0,
       tax: 0,
-      multiplier: "",
-      unitDesc: "",
+      multiplier: 1,
+      unitDesc: "per gal",
       rateDesc: "",
       rateName: "",
       customerID: "0",
       locationID: "",
       fuelType: "choose",
-      locOptions: [],
+      
       fixmark: false,
       pctmark: false,
       final: 0,
-      rateIsPrepaid: "off",
+      isCustomerRate: false,
 
       showCustomerLookup: false
     };
@@ -43,7 +43,33 @@ class AddRate extends Component {
     });
   }
 
-  postNewRate() {}
+  postNewRate(e) {
+    e.preventDefault();
+    
+    axios.post("http://52.15.62.203:8080/addrate",{
+      baseRate: this.state.baseRate,
+      markupType: this.state.markupType,
+      fixed: this.state.fixed,
+      pct: this.state.pct,
+      tax: this.state.tax,
+      multiplier: this.state.multiplier,
+      unitDesc: this.state.unitDesc,
+      rateDesc: this.state.rateDesc,
+      rateName: this.state.rateName,
+      customerID: this.state.customerID,
+      locationID: this.state.locationID,
+      fuelType: this.state.fuelType,
+            
+    }).then(response => {
+      console.log(response);
+      this.props.onHide();
+    })
+    .catch(error => {
+      console.log(error.response);
+    });
+  console.log("sent new rate req");
+
+  }
 
   handleChange(event) {
     const target = event.target;
@@ -53,9 +79,9 @@ class AddRate extends Component {
       if (value == "fixed") {
         this.setState({ fixmark: true, pctmark: false, pct: "0" });
       } else if (value == "pct") {
-        this.setState({ fixmark: false, pctmark: true, pct: "0" });
+        this.setState({ fixmark: false, pctmark: true, fixed: "0" });
       } else {
-        this.setState({ fixmark: false, pctmark: false, fixed: "0" });
+        this.setState({ fixmark: false, pctmark: false, fixed: "0", pct: "0" });
       }
     }
     if (target.type == "checkbox") {
@@ -65,7 +91,7 @@ class AddRate extends Component {
         [name]: value
       });
     }
-    if (this.state.rateIsPrepaid == false) {
+    if (this.state.isCustomerRate == false) {
       this.setState({ customerID: "" });
     }
   }
@@ -84,22 +110,7 @@ class AddRate extends Component {
     this.setState({ final: final.toFixed(2) });
   };
 
-  componentDidMount() {
-    axios.get("http://52.15.62.203:8080/getlocations").then(({ data }) => {
-      var arr = [];
-      for (var k = 0; k < data.length; k++) {
-        arr.push(
-          <option key={data[k].locationID} value={data[k].locationID}>
-            {" "}
-            {data[k].airport_code}{" "}
-          </option>
-        );
-      }
-      this.setState({
-        locOptions: arr
-      });
-    });
-  }
+  
   handleCustomer = value => {
     this.setState({ customerID: value });
   };
@@ -141,13 +152,13 @@ class AddRate extends Component {
                     placeholder=""
                   />
                 </div>
-                <Locations />
+                <Locations name="locationID" onChange={this.handleChange}/>
               </div>
             </div>
 
             <div className="bgc-white bd m-3 pT-4">
               <div className="row">
-                <div className="col-3">
+                <div className="col-2">
                   <label htmlFor="fuelType">Fuel Type</label>
                   <select
                     className="custom-select form-control form-control-lg"
@@ -166,24 +177,26 @@ class AddRate extends Component {
                     <input
                       type="checkbox"
                       className="form-check-input  "
-                      name="rateIsPrepaid"
+                      name="isCustomerRate"
                       onChange={this.handleChange}
                       placeholder=""
                       id="ratepp"
                     />
                     <label className="form-check-label" htmlFor="ratepp">
-                      Prepaid
+                      Apply to Customer
                     </label>
                   </div>
                 </div>
                 <div className="col">
-                  <PrepaidCustomer
+                
+
+                  <CustomersDropDown
                     classList="custom-select form-control form-control-lg pB-3 mx-auto my-auto"
-                    onChange={this.handleChange}
+                    selectedCustomer={this.handleCustomer}
                     name="customerID"
-                    disabled={!this.state.rateIsPrepaid}
+                    disabled={!this.state.isCustomerRate}
                   />
-                  <label htmlFor="customerID">Prepaid Customers</label>
+                  
                 </div>
               </div>
             </div>
@@ -192,7 +205,7 @@ class AddRate extends Component {
                 <div className="col-2">
                   <label htmlFor="baserate">Base Rate ($)</label>
                   <input
-                    type="number"
+                    type="text"
                     className="form-control form-control-lg"
                     name="baseRate"
                     onChange={this.handleChange}
@@ -229,7 +242,7 @@ class AddRate extends Component {
                 <div className="col-2">
                   <label htmlFor="fixed">Fixed Rate </label>
                   <input
-                    type="number"
+                    type="text"
                     className="form-control form-control-lg"
                     name="fixed"
                     onChange={this.handleChange}
@@ -241,7 +254,7 @@ class AddRate extends Component {
                 <div className="col-2">
                   <label htmlFor="pct">Percent Rate </label>
                   <input
-                    type="number"
+                    type="text"
                     className="form-control form-control-lg"
                     name="pct"
                     value={this.state.pct}
@@ -255,7 +268,7 @@ class AddRate extends Component {
                 <div className="col-2">
                   <label htmlFor="tax">Tax</label>
                   <input
-                    type="number"
+                    type="text"
                     className="form-control form-control-lg"
                     name="tax"
                     onChange={this.handleChange}
@@ -264,7 +277,7 @@ class AddRate extends Component {
                 <div className="col-2">
                   <label htmlFor="storage">Storage Fee</label>
                   <input
-                    type="number"
+                    type="text"
                     className="form-control form-control-lg"
                     name="storage"
                     onChange={this.handleChange}
@@ -287,7 +300,7 @@ class AddRate extends Component {
 
             <button
               className="btn btn-primary btn-lg"
-              onClick={this.postNewCustomer}
+              onClick={this.postNewRate}
             >
               Submit
             </button>

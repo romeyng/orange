@@ -79,8 +79,8 @@ class Locations extends Component {
         <label htmlFor="locationID">Location</label>
         <select
           className="custom-select form-control form-control-lg"
-          name="locationID"
-          onChange={this.handleChange}
+          name={this.props.name}
+          onChange={this.props.onChange}
         >
           {this.state.locations}
         </select>

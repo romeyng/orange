@@ -19,11 +19,11 @@ class CustomersDropDown extends Component {
     console.log("getcustomers called");
     axios.post("http://52.15.62.203:8080/getcustomers").then(({ data }) => {
       console.log(data);
-      var arr = [];
+      var arr = [<option value="0">Select Customer</option>];
       for (var k = 0; k < data.length; k++) {
         arr.push(
           <option key={data[k].customerID} value={data[k].customerID}>
-            {data[k].customer_name}
+            {data[k].customer_name} ({data[k].account_type})
           </option>
         );
       }
@@ -49,26 +49,33 @@ class CustomersDropDown extends Component {
     this.setState({
       [name]: value
     });
-    this.props.selectedcustomer(value);
+    this.props.selectedCustomer(value);
   };
   render() {
     let modalClose = () => this.setState({ addCustomer: false });
     return (
-      <div className="row">
-        <div className="col input-group">
+      <div className="row" >
+        <div className="col-10 input-group">
           <select
             className={this.props.classList}
-            name="customerID"
+            name={this.props.name}
             onChange={this.handleChange}
+            disabled={this.props.disabled}
           >
             {this.state.customerOptions}
           </select>
         </div>
+        
         <div className="input-group-append ">
+        
           <button
             className="btn btn-outline-secondary"
             type="button"
+            id="addButton"
             onClick={this.addCustomer}
+            disabled={this.props.disabled}
+            data-toggle="tooltip" 
+            title="Add new customer"
           >
             <span className="icon-holder">
               <i className="c-green-500 ti-plus " />
