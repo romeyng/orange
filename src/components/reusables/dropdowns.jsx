@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+
 class PrepaidCustomer extends Component {
   constructor(props) {
     super(props);
@@ -75,7 +76,7 @@ class Locations extends Component {
   }
   render() {
     return (
-      <div className="col-2">
+      <div>
         <label htmlFor="locationID">Location</label>
         <select
           className="custom-select form-control form-control-lg"
@@ -88,5 +89,6 @@ class Locations extends Component {
     );
   }
 }
+
 export { PrepaidCustomer };
 export { Locations };

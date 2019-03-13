@@ -54,8 +54,8 @@ class CustomersDropDown extends Component {
   render() {
     let modalClose = () => this.setState({ addCustomer: false });
     return (
-      <div className="row" >
-        <div className="col-10 input-group">
+      <div className="row">
+        <div className="col-8 input-group">
           <select
             className={this.props.classList}
             name={this.props.name}
@@ -65,16 +65,15 @@ class CustomersDropDown extends Component {
             {this.state.customerOptions}
           </select>
         </div>
-        
-        <div className="input-group-append ">
-        
+
+        <div className="col input-group-append ">
           <button
             className="btn btn-outline-secondary"
             type="button"
             id="addButton"
             onClick={this.addCustomer}
             disabled={this.props.disabled}
-            data-toggle="tooltip" 
+            data-toggle="tooltip"
             title="Add new customer"
           >
             <span className="icon-holder">

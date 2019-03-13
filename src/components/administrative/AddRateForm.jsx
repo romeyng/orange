@@ -3,9 +3,9 @@ import { Modal } from "react-bootstrap";
 import axios from "axios";
 import CustomerLookup from "./CustomerLookup";
 import CustomersDropDown from "./CustomersDropDown";
-import { Locations, PrepaidCustomer } from "../reusables/dropdowns";
+import { Locations, PrepaidCustomer, Example } from "../reusables/dropdowns";
+import RateSelector from "../reusables/RateSelector";
 
-//TODO: Build form input fields, create post request
 class AddRate extends Component {
   constructor(props) {
     super(props);
@@ -16,13 +16,13 @@ class AddRate extends Component {
       pct: 0,
       tax: 0,
       multiplier: 1,
-      unitDesc: "per gal",
+      unitDesc: "per gal.",
       rateDesc: "",
       rateName: "",
       customerID: "0",
       locationID: "",
       fuelType: "choose",
-      
+
       fixmark: false,
       pctmark: false,
       final: 0,
@@ -45,30 +45,30 @@ class AddRate extends Component {
 
   postNewRate(e) {
     e.preventDefault();
-    
-    axios.post("http://52.15.62.203:8080/addrate",{
-      baseRate: this.state.baseRate,
-      markupType: this.state.markupType,
-      fixed: this.state.fixed,
-      pct: this.state.pct,
-      tax: this.state.tax,
-      multiplier: this.state.multiplier,
-      unitDesc: this.state.unitDesc,
-      rateDesc: this.state.rateDesc,
-      rateName: this.state.rateName,
-      customerID: this.state.customerID,
-      locationID: this.state.locationID,
-      fuelType: this.state.fuelType,
-            
-    }).then(response => {
-      console.log(response);
-      this.props.onHide();
-    })
-    .catch(error => {
-      console.log(error.response);
-    });
-  console.log("sent new rate req");
 
+    axios
+      .post("http://52.15.62.203:8080/addrate", {
+        baseRate: this.state.baseRate,
+        markupType: this.state.markupType,
+        fixed: this.state.fixed,
+        pct: this.state.pct,
+        tax: this.state.tax,
+        multiplier: this.state.multiplier,
+        unitDesc: this.state.unitDesc,
+        rateDesc: this.state.rateDesc,
+        rateName: this.state.rateName,
+        customerID: this.state.customerID,
+        locationID: this.state.locationID,
+        fuelType: this.state.fuelType
+      })
+      .then(response => {
+        console.log(response);
+        this.props.onHide();
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
+    console.log("sent new rate req");
   }
 
   handleChange(event) {
@@ -110,7 +110,6 @@ class AddRate extends Component {
     this.setState({ final: final.toFixed(2) });
   };
 
-  
   handleCustomer = value => {
     this.setState({ customerID: value });
   };
@@ -141,7 +140,6 @@ class AddRate extends Component {
                     placeholder=""
                   />
                 </div>
-
                 <div className="col-6">
                   <label htmlFor="rateDesc">Rate Description</label>
                   <input
@@ -152,7 +150,9 @@ class AddRate extends Component {
                     placeholder=""
                   />
                 </div>
-                <Locations name="locationID" onChange={this.handleChange}/>
+                <div className="col-2">
+                  <Locations name="locationID" onChange={this.handleChange} />
+                </div>
               </div>
             </div>
 
@@ -188,15 +188,12 @@ class AddRate extends Component {
                   </div>
                 </div>
                 <div className="col">
-                
-
                   <CustomersDropDown
                     classList="custom-select form-control form-control-lg pB-3 mx-auto my-auto"
                     selectedCustomer={this.handleCustomer}
                     name="customerID"
                     disabled={!this.state.isCustomerRate}
                   />
-                  
                 </div>
               </div>
             </div>
@@ -291,6 +288,7 @@ class AddRate extends Component {
                     Calculate Final Rate
                   </button>
                 </div>
+                <RateSelector />
 
                 <div className="col bg-info my-auto mx-auto">
                   <FinalRate final={this.state.final} />
