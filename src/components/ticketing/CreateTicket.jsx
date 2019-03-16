@@ -10,6 +10,7 @@ import axios from "axios";
 import DatePicker from "react-date-picker";
 
 import CustomersDropDown from "../administrative/CustomersDropDown";
+import { RatesDropDown, Locations } from "../reusables/dropdowns";
 
 class CreateTicket extends Component {
   constructor(props) {
@@ -72,7 +73,8 @@ class CreateTicket extends Component {
         dateCreated: this.getFormattedDate(this.state.dateCreated),
         dateComplete: this.getFormattedDate(this.state.dateComplete),
         ticketStatus: this.state.ticketstatus,
-        paymentStatus: this.state.paymentStatus
+        paymentStatus: this.state.paymentStatus,
+        rateID: this.state.rateID
       })
       .then(response => {
         console.log(response);
@@ -153,7 +155,12 @@ class CreateTicket extends Component {
 
   render() {
     let modalClose = () => this.setState({ showCustomerLookup: false });
+    const qparams = {
+      customerID: this.state.customerID,
 
+      location: this.state.fuelLocation,
+      fuelType: this.state.fuelType
+    };
     return (
       <Modal
         {...this.props}
@@ -176,6 +183,7 @@ class CreateTicket extends Component {
                     <CustomersDropDown
                       classList="custom-select form-control form-control-lg p-5"
                       selectedcustomer={this.handleCustomer}
+                      name="customerID"
                     />
                   </div>
                 </div>
@@ -249,18 +257,10 @@ class CreateTicket extends Component {
                 <div className="mT-30">
                   <div className="form-row">
                     <div className="form-group col-6 mx-auto">
-                      <select
-                        className="custom-select form-control form-control-lg"
+                      <Locations
                         name="fuelLocation"
-                        value={this.state.fuelLocation}
                         onChange={this.handleChange}
-                      >
-                        <option value="0">Fuel Location</option>
-                        <option value="1">CIW</option>
-                        <option value="2">SVD</option>
-                        <option value="3">BGI</option>
-                        <option value="4">UVF</option>
-                      </select>
+                      />
                     </div>
                     <div className="form-group col-6 mx-auto">
                       <select
@@ -423,11 +423,16 @@ class CreateTicket extends Component {
                   </div>
                 </div>
               </div>
-              <div className="col- 4 px-2">
-                <h6 className="c-grey-900" />
+              <div className="col- 4 px-4">
                 <BillingDetail
                   payment_type={this.state.payment_type}
                   handleChange={this.handleChange}
+                />
+                <RatesDropDown
+                  onChange={this.handleChange}
+                  classList="custom-select"
+                  name="rateID"
+                  qparams={qparams}
                 />
               </div>
             </div>
@@ -450,7 +455,7 @@ export default CreateTicket;
 
 export const BillingDetail = props => {
   let invoice = (
-    <div className="form-group">
+    <div className="row form-group">
       <label className="mr-1" htmlFor="invoice_no">
         Invoice No
       </label>

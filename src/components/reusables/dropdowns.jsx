@@ -58,7 +58,7 @@ class Locations extends Component {
 
   getLocations = () => {
     axios.get("http://52.15.62.203:8080/getlocations").then(({ data }) => {
-      var arr = [];
+      var arr = [<option value="0">Choose Location</option>];
       for (var k = 0; k < data.length; k++) {
         arr.push(
           <option key={data[k].locationID} value={data[k].locationID}>
@@ -77,7 +77,6 @@ class Locations extends Component {
   render() {
     return (
       <div>
-        <label htmlFor="locationID">Location</label>
         <select
           className="custom-select form-control form-control-lg"
           name={this.props.name}
@@ -90,5 +89,74 @@ class Locations extends Component {
   }
 }
 
+class RatesDropDown extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentRates: []
+    };
+  }
+
+  getCurrentRates = () => {
+    console.log("getcurrentrates called");
+    axios
+      .post("http://52.15.62.203:8080/getcurrentrates", {
+        customerID: this.props.qparams.customerID,
+        fuelLocation: this.props.qparams.location,
+        fuelType: this.props.qparams.fuelType
+      })
+      .then(({ data }) => {
+        console.log(data);
+        var arr = [<option value="0">Choose Rate</option>];
+        for (var k = 0; k < data.length; k++) {
+          arr.push(
+            <option key={data[k].rateID} value={data[k].rateID}>
+              {data[k].rateID}-{data[k].rate_name}
+            </option>
+          );
+        }
+        this.setState({
+          currentRates: arr
+        });
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
+  };
+  render() {
+    return (
+      <div className="row">
+        <div className="col-9 input-group">
+          <select
+            className={this.props.classList}
+            name={this.props.name}
+            onChange={this.props.onChange}
+            disabled={this.props.disabled}
+          >
+            {this.state.currentRates}
+          </select>
+        </div>
+
+        <div className="input-group-append ">
+          <button
+            className="btn btn-outline-secondary"
+            type="button"
+            id="refreshRates"
+            onClick={this.getCurrentRates}
+            disabled={this.props.disabled}
+            data-toggle="tooltip"
+            title="Add new customer"
+          >
+            <span className="icon-holder">
+              <i className="c-green-500 ti-reload " />
+            </span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+
+export { RatesDropDown };
 export { PrepaidCustomer };
 export { Locations };

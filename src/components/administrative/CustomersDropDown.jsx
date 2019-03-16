@@ -49,7 +49,7 @@ class CustomersDropDown extends Component {
     this.setState({
       [name]: value
     });
-    this.props.selectedCustomer(value);
+    this.props.selectedcustomer(value);
   };
   render() {
     let modalClose = () => this.setState({ addCustomer: false });
