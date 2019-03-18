@@ -59,7 +59,8 @@ class AddRate extends Component {
         rateName: this.state.rateName,
         customerID: this.state.customerID,
         locationID: this.state.locationID,
-        fuelType: this.state.fuelType
+        fuelType: this.state.fuelType,
+        companyID: this.state.companyID
       })
       .then(response => {
         console.log(response);
@@ -110,8 +111,8 @@ class AddRate extends Component {
     this.setState({ final: final.toFixed(2) });
   };
 
-  handleCustomer = value => {
-    this.setState({ customerID: value });
+  handleCustomer = (value,comid) => {
+    this.setState({ customerID: value, companyID: comid });
   };
 
   render() {
@@ -193,6 +194,7 @@ class AddRate extends Component {
                     selectedCustomer={this.handleCustomer}
                     name="customerID"
                     disabled={!this.state.isCustomerRate}
+                    
                   />
                 </div>
               </div>
@@ -288,7 +290,7 @@ class AddRate extends Component {
                     Calculate Final Rate
                   </button>
                 </div>
-                <RateSelector />
+                
 
                 <div className="col bg-info my-auto mx-auto">
                   <FinalRate final={this.state.final} />

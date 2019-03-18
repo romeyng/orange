@@ -13,20 +13,39 @@ class CustomersDropDown extends Component {
   }
   addCustomer = () => {
     this.setState({ addCustomer: true });
+    this.getCompanies();
   };
+
+  getCompanies=()=>{
+    axios.get(`http://52.15.62.203:8080/getcompanies`).then(({ data }) => {
+      console.log("getcompanies called");
+      var arr = [<option value="0">Choose Company</option>];
+      for (var k = 0; k < data.length; k++) {
+        arr.push(
+          <option key={data[k].companyID} value={data[k].companyID}>
+            {data[k].company_name} ({data[k].account_type})
+          </option>
+        );
+      }
+      console.log("getcompanies res: "+arr);
+      this.setState({companyresults: arr});
+        
+      
+    });
+  }
 
   getCustomers = () => {
     console.log("getcustomers called");
     axios.post("http://52.15.62.203:8080/getcustomers").then(({ data }) => {
       console.log(data);
-      var arr = [<option value="0">Select Customer</option>];
+      var arr = [<option data-comid="0" value="0">Select Customer</option>];
       for (var k = 0; k < data.length; k++) {
         arr.push(
-          <option key={data[k].customerID} value={data[k].customerID}>
+          <option data-comid={data[k].companyID} key={data[k].customerID} value={data[k].customerID}>
             {data[k].customer_name} ({data[k].account_type})
           </option>
         );
-      }
+      } 
       this.setState({
         customerOptions: arr
       });
@@ -45,11 +64,13 @@ class CustomersDropDown extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    console.log(value);
-    this.setState({
-      [name]: value
-    });
-    this.props.selectedcustomer(value);
+    const comid = target.selectedOptions[0].getAttribute('data-comid');
+    
+    this.setState({ [name]: value});
+     
+    
+    this.props.selectedCustomer(value, comid);
+    
   };
   render() {
     let modalClose = () => this.setState({ addCustomer: false });
@@ -85,6 +106,7 @@ class CustomersDropDown extends Component {
           show={this.state.addCustomer}
           onHide={modalClose}
           refreshlist={this.handleAdd}
+          companylist={this.state.companyresults}
         />
       </div>
     );

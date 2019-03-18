@@ -17,11 +17,14 @@ class Rates extends Component {
       let modalClose = (e) => this.setState({ formAddRate:false});
         return ( 
             <main className="main-content bgc-grey-100">
-        <div className="mainContent">
-        <button className="mX-4 btn btn-lg btn-primary"
+            <button className="mX-4 btn btn-lg btn-primary"
             onClick={this.showFormAddRate} >
             Add Rate</button>
         <AddRate  show={this.state.formAddRate} onHide={modalClose}/>
+
+
+        <div className="mainContent">
+        
           <RatesTable/>
         </div>
       </main>
@@ -30,3 +33,4 @@ class Rates extends Component {
 }
  
 export default Rates;
+

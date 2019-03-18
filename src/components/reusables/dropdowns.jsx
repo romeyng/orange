@@ -156,7 +156,26 @@ class RatesDropDown extends Component {
     );
   }
 }
+const CompanySelector = props =>{
+  if (props.companystat == "existing"){
+return <select className="custom-select form-control form-control-lg" onChange={props.onChange} name={props.name}>
+{props.dataset}
+</select>
+  } else{
+    return  <><label className="mr-1" htmlFor={props.name}>
+    Company Name
+  </label>
+  <input
+    name={props.name}
+    className="form-control form-control-lg"
+    type="text"
+    onChange={props.onChange}
+  /></> 
+  }
+  
+}
 
+export {CompanySelector};
 export { RatesDropDown };
 export { PrepaidCustomer };
 export { Locations };
