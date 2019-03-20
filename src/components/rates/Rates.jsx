@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import RatesTable from "./RatesTable";
 import AddRate from "../administrative/AddRateForm";
-import { CompaniesList } from "./CompaniesList";
+import  CompaniesList  from "./CompaniesList";
 import axios from "axios";
 class Rates extends Component {
   constructor(...args) {
@@ -16,22 +16,38 @@ class Rates extends Component {
   };
 
   async componentDidMount() {
-    console.log("getcustomers called");
-    axios.post("http://52.15.62.203:8080/getcompanies").then(({ data }) => {
+    console.log("getcompanies called");
+    try{
+    await axios.get("http://52.15.62.203:8080/getcompanies").then(({ data }) => {
       console.log(data);
       var arr = [];
       for (var k = 0; k < data.length; k++) {
         arr.push(
-          <li>
-            <a>{data[k].company_name}</a>
-          </li>
+          
+            <a href="#" name={"company"+data[k].companyID} value={data[k].companyID} className="list-group-item list-group-item-action" onClick={this.handleChange} >{data[k].company_name}</a>
+          
         );
       }
       this.setState({
         companies: arr
       });
+    
+    });
+  }catch{
+    console.log("there was an error")
+  }
+  }
+
+  handleChange=(event)=> {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
     });
   }
+ 
 
   render() {
     let modalClose = e => this.setState({ formAddRate: false });
@@ -47,7 +63,7 @@ class Rates extends Component {
 
         <div className="mainContent row">
           <div className="col-2 p-0">
-            <CompaniesList companies={this.state.companies} />
+            <CompaniesList list={this.state.companies}>{this.state.arr}</CompaniesList>
           </div>
           <div className="col-10 p-0">
             <RatesTable />
