@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.14",
+    "@fortawesome/fontawesome-svg-core": "^1.2.16",
     "@fortawesome/free-solid-svg-icons": "^5.7.1",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "axios": "^0.18.0",
@@ -23,7 +23,7 @@
     "masonry-layout": "^4.2.2",
     "moment": "^2.24.0",
     "node-sass": "^4.11.0",
-    "npm": "^6.7.0",
+    "npm": "^6.9.0",
     "perfect-scrollbar": "^1.4.0",
     "popper": "^1.0.1",
     "popper.js": "^1.14.7",
