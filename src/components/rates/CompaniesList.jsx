@@ -5,11 +5,11 @@ class CompaniesList extends Component {
     super(props);
    
   }
-  componentDidUpdate(prevProps, prevState) {
-    
-  }
-
   
+  handleClick = event => {
+this.props.handleClick(event);
+
+  }
   render() { 
 
 
@@ -18,9 +18,9 @@ class CompaniesList extends Component {
 
     return ( 
     <div className="card pr-1">
-    <div class="card-body"> 
-    <h4 class="card-title">Pick Category</h4>
-    <div class="list-group ">
+    <div className="card-body"> 
+    <h4 className="card-title">Rates</h4>
+    <div className="list-group ">
     {this.props.list}
     </div>
     </div>

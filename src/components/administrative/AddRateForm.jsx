@@ -20,8 +20,9 @@ class AddRate extends Component {
       rateDesc: "",
       rateName: "",
       customerID: "0",
-      locationID: "",
-      fuelType: "choose",
+      companyID:"0",
+      locationID: "0",
+      fuelType: "0",
 
       fixmark: false,
       pctmark: false,
@@ -64,6 +65,7 @@ class AddRate extends Component {
       })
       .then(response => {
         console.log(response);
+        this.props.reloadRates()
         this.props.onHide();
       })
       .catch(error => {
@@ -73,6 +75,7 @@ class AddRate extends Component {
   }
 
   handleChange(event) {
+    event.preventDefault();
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -93,7 +96,7 @@ class AddRate extends Component {
       });
     }
     if (this.state.isCustomerRate == false) {
-      this.setState({ customerID: "" });
+      this.setState({ customerID: "0" });
     }
   }
   calculateFinalRate = event => {
@@ -141,7 +144,7 @@ class AddRate extends Component {
                     placeholder=""
                   />
                 </div>
-                <div className="col-6">
+                <div className="col-4">
                   <label htmlFor="rateDesc">Rate Description</label>
                   <input
                     type="text"
@@ -151,7 +154,8 @@ class AddRate extends Component {
                     placeholder=""
                   />
                 </div>
-                <div className="col-2">
+                <div className="col-4">
+                <label htmlFor="locationID">Choose Location</label>
                   <Locations name="locationID" onChange={this.handleChange} />
                 </div>
               </div>
@@ -167,6 +171,7 @@ class AddRate extends Component {
                     value={this.state.fuelType}
                     onChange={this.handleChange}
                   >
+                    <option value="0">Select</option>
                     <option value="1">Jet A1</option>
                     <option value="2">Diesel</option>
                   </select>

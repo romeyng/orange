@@ -30,6 +30,16 @@ class RatesTable extends Component {
       .DataTable()
       .destroy(true);
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log("scu");
+  }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    console.log("getderv");
+  }
+  componentDidUpdate(prevProps, prevState) {
+    console.log("cdu");
+  }
+
   fillRatesTable() {
     $(this.refs.ratesTable).DataTable({
       data: this.state.payload,
@@ -43,7 +53,7 @@ class RatesTable extends Component {
         { title: "Rate Name", data: "rate_name" },
         { title: "Airport", data: "airport_code" },
         { title: "Base Rate", data: "base_rate" },
-        //{ title: "Final Rate", render: ()=>}
+        { title: "Final Rate", data: "final_rate"},
         { title: "Description", data: "rate_desc" },
 
         { title: "Unit", data: "unit_desc" }
@@ -51,12 +61,13 @@ class RatesTable extends Component {
     });
   }
   render() {
+    console.log("rendering");
     return (
       <div className="container-fluid">
         <div className="row">
           <div className="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
             <div className="bgc-white bd bdrs-3 p-20 mB-20">
-              <RateTableActions />
+              <RateTableActions showForm={this.props.showForm}/>
 
               <table
                 id="ratesTable"
@@ -79,14 +90,16 @@ const RateTableActions = props => {
   return (
     <div className="row">
       <div className="col-6">
-        <h4 className="c-grey-900 mB-20">Rates Table</h4>
+        <h4 className="c-grey-900 mB-20">Active Rates - March 2019</h4>
       </div>
-      <div className="col-6">
+      <div className="col-6" >
         <Button
           className="mx-2"
-          name="addRate"
+          name="formAddRate"
           variant="outline-success"
           type="button"
+          onClick={props.showForm}
+          
         >
           <span className="icon-holder mx-1">
             <i className="ti-plus " />

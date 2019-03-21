@@ -58,7 +58,7 @@ class Locations extends Component {
 
   getLocations = () => {
     axios.get("http://52.15.62.203:8080/getlocations").then(({ data }) => {
-      var arr = [<option value="0">Choose Location</option>];
+      var arr = [<option value="0">Select</option>];
       for (var k = 0; k < data.length; k++) {
         arr.push(
           <option key={data[k].locationID} value={data[k].locationID}>
